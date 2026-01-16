@@ -1,0 +1,8 @@
+# Binaries
+sq
+
+# Config with secrets
+.sq-cli.yaml
+
+# OS specific
+.DS_Store
