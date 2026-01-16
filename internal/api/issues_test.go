@@ -11,12 +11,13 @@ import (
 )
 
 func TestSearchIssues(t *testing.T) {
+	const testOrg = "test-org"
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "/api/issues/search", r.URL.Path)
 		
 		q := r.URL.Query()
 		assert.Equal(t, "proj-key", q.Get("componentKeys"))
-		assert.Equal(t, "test-org", q.Get("organization")) // The fix we verified earlier
+		assert.Equal(t, testOrg, q.Get("organization")) // The fix we verified earlier
 		assert.Equal(t, "main", q.Get("branch"))
 		assert.Equal(t, "BUG", q.Get("types"))
 		assert.Equal(t, "CRITICAL", q.Get("severities"))
@@ -32,7 +33,7 @@ func TestSearchIssues(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := &config.Config{URL: server.URL, Token: "token", Organization: "test-org"}
+	cfg := &config.Config{URL: server.URL, Token: "token", Organization: testOrg}
 	client := NewClient(cfg)
 
 	resp, err := client.SearchIssues(SearchIssuesParams{
@@ -51,7 +52,7 @@ func TestSearchIssues(t *testing.T) {
 	}
 }
 
-func TestSearchIssues_Defaults(t *testing.T) {
+func TestSearchIssuesDefaults(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		q := r.URL.Query()
 		assert.Empty(t, q.Get("branch")) // Should not be sent if empty
@@ -59,7 +60,7 @@ func TestSearchIssues_Defaults(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := &config.Config{URL: server.URL, Organization: "test-org"}
+	cfg := &config.Config{URL: server.URL, Organization: testOrg}
 	client := NewClient(cfg)
 
 	_, err := client.SearchIssues(SearchIssuesParams{ProjectKey: "pk"})

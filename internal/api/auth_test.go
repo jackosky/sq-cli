@@ -31,7 +31,7 @@ func TestValidateToken(t *testing.T) {
 	assert.Equal(t, "user-login", user.Login)
 }
 
-func TestValidateToken_Error(t *testing.T) {
+func TestValidateTokenError(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusUnauthorized)
