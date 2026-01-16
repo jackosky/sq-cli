@@ -14,11 +14,15 @@ type Config struct {
 	Organization string `mapstructure:"organization"`
 }
 
-func LoadConfig() (*Config, error) {
-	viper.SetConfigName(".sq-cli")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath(os.Getenv("HOME"))
-	viper.AddConfigPath(".")
+func LoadConfig(customPath string) (*Config, error) {
+	if customPath != "" {
+		viper.SetConfigFile(customPath)
+	} else {
+		viper.SetConfigName(".sq-cli")
+		viper.SetConfigType("yaml")
+		viper.AddConfigPath(os.Getenv("HOME"))
+		viper.AddConfigPath(".")
+	}
 
 	viper.SetEnvPrefix("SONAR")
 	viper.AutomaticEnv()

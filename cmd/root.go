@@ -18,7 +18,7 @@ var rootCmd = &cobra.Command{
 	Short: "A simple CLI for SonarQube Cloud",
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		var err error
-		cfg, err = config.LoadConfig()
+		cfg, err = config.LoadConfig("")
 		if err != nil {
 			return err
 		}

@@ -14,7 +14,7 @@ var authCmd = &cobra.Command{
 		var err error
 		// We still want to load config to get defaults or existing values, 
 		// but we don't enforce constraints
-		cfg, err = config.LoadConfig()
+		cfg, err = config.LoadConfig("")
 		if err != nil {
 			return err
 		}
