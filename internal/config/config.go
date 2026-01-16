@@ -12,6 +12,7 @@ type Config struct {
 	URL          string `mapstructure:"url"`
 	Token        string `mapstructure:"token"`
 	Organization string `mapstructure:"organization"`
+	
 }
 
 func LoadConfig(customPath string) (*Config, error) {
