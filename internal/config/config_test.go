@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestLoadConfig_Defaults(t *testing.T) {
+func TestLoadConfigDefaults(t *testing.T) {
 	// Reset viper
 	viper.Reset()
 	os.Unsetenv("SONAR_TOKEN")
@@ -27,7 +27,7 @@ func TestLoadConfig_Defaults(t *testing.T) {
 	assert.Empty(t, cfg.Token)
 }
 
-func TestLoadConfig_Env(t *testing.T) {
+func TestLoadConfigEnv(t *testing.T) {
 	viper.Reset()
 	os.Setenv("SONAR_TOKEN", "env-token")
 	os.Setenv("SONAR_ORGANIZATION", "env-org")

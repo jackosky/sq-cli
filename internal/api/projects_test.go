@@ -11,6 +11,12 @@ import (
 )
 
 func TestCreateProject(t *testing.T) {
+	const (
+		testName = "test-name"
+		testKey  = "test-key"
+		testOrg  = "test-org"
+	)
+
 	// Mock Server
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "/api/projects/create", r.URL.Path)
@@ -18,9 +24,9 @@ func TestCreateProject(t *testing.T) {
 		
 		err := r.ParseForm()
 		assert.NoError(t, err)
-		assert.Equal(t, "test-name", r.Form.Get("name"))
-		assert.Equal(t, "test-key", r.Form.Get("project"))
-		assert.Equal(t, "test-org", r.Form.Get("organization"))
+		assert.Equal(t, testName, r.Form.Get("name"))
+		assert.Equal(t, testKey, r.Form.Get("project"))
+		assert.Equal(t, testOrg, r.Form.Get("organization"))
 		assert.Equal(t, "public", r.Form.Get("visibility"))
 
 		w.Header().Set("Content-Type", "application/json")
@@ -28,29 +34,30 @@ func TestCreateProject(t *testing.T) {
 			Project: struct {
 				Key  string `json:"key"`
 				Name string `json:"name"`
-			}{Key: "test-key", Name: "test-name"},
+			}{Key: testKey, Name: testName},
 		})
 	}))
 	defer server.Close()
 
-	cfg := &config.Config{URL: server.URL, Token: "token", Organization: "test-org"}
+	cfg := &config.Config{URL: server.URL, Token: "token", Organization: testOrg}
 	client := NewClient(cfg)
 
 	resp, err := client.CreateProject(CreateProjectParams{
-		Name:       "test-name",
-		ProjectKey: "test-key",
+		Name:       testName,
+		ProjectKey: testKey,
 		Visibility: "public",
 	})
 
 	assert.NoError(t, err)
-	assert.Equal(t, "test-key", resp.Project.Key)
-	assert.Equal(t, "test-name", resp.Project.Name)
+	assert.Equal(t, testKey, resp.Project.Key)
+	assert.Equal(t, testName, resp.Project.Name)
 }
 
 func TestSearchProjects(t *testing.T) {
+	const testOrg = "test-org"
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "/api/projects/search", r.URL.Path)
-		assert.Equal(t, "test-org", r.URL.Query().Get("organization"))
+		assert.Equal(t, testOrg, r.URL.Query().Get("organization"))
 		assert.Equal(t, "filter-term", r.URL.Query().Get("q"))
 
 		w.Header().Set("Content-Type", "application/json")
@@ -62,7 +69,7 @@ func TestSearchProjects(t *testing.T) {
 	}))
 	defer server.Close()
 
-	cfg := &config.Config{URL: server.URL, Token: "token", Organization: "test-org"}
+	cfg := &config.Config{URL: server.URL, Token: "token", Organization: testOrg}
 	client := NewClient(cfg)
 
 	resp, err := client.SearchProjects(SearchProjectsParams{Filter: "filter-term"})
