@@ -53,6 +53,7 @@ func TestSearchIssues(t *testing.T) {
 }
 
 func TestSearchIssuesDefaults(t *testing.T) {
+	const testOrg = "test-org"
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		q := r.URL.Query()
 		assert.Empty(t, q.Get("branch")) // Should not be sent if empty
