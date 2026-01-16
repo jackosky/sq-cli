@@ -29,6 +29,8 @@ func LoadConfig(customPath string) (*Config, error) {
 
 	// Set defaults
 	viper.SetDefault("url", "https://sonarcloud.io")
+	viper.SetDefault("token", "")
+	viper.SetDefault("organization", "")
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
